@@ -21,18 +21,20 @@ def lambda_handler(event, context):
     if "challenge" in event:
         return event["challenge"]
         
-        
-    token = get_token()
-
-    dic_command = get_command(event.get("event").get("text"))
-    kouho = get_date(dic_command["num"], dic_command["time"])
-    chosei_url = get_chosei_url(token, dic_command["name"], kouho)
+    chosei_url = choseisan(event.get("event").get("text"))
     
     # Slackにメッセージを投稿する
-    serihu = testerchan.serihu() + "\n" + chosei_url
-    post_message_to_channel(event.get("event").get("channel"), serihu)
+    message = testerchan.get_serifu() + "\n" + chosei_url
+    post_message_to_channel(event.get("event").get("channel"), message)
 
     return 'OK'
+    
+def choseisan(text):
+    token = get_token()
+    dic_command = get_command(text)
+    kouho = get_date(dic_command["num"], dic_command["time"])
+    chosei_url = get_chosei_url(token, dic_command["name"], kouho)
+    return chosei_url
 
 
 def post_message_to_channel(channel, message):
