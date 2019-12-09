@@ -6,6 +6,7 @@ import urllib.request
 import urllib
 import datetime
 import re
+import testerchan
 
 # ログ設定
 logger = logging.getLogger()
@@ -22,12 +23,14 @@ def lambda_handler(event, context):
         
         
     token = get_token()
+
     dic_command = get_command(event.get("event").get("text"))
     kouho = get_date(dic_command["num"], dic_command["time"])
     chosei_url = get_chosei_url(token, dic_command["name"], kouho)
     
     # Slackにメッセージを投稿する
-    post_message_to_channel(event.get("event").get("channel"), chosei_url)
+    serihu = testerchan.serihu() + "\n" + chosei_url
+    post_message_to_channel(event.get("event").get("channel"), serihu)
 
     return 'OK'
 
