@@ -21,7 +21,7 @@ def lambda_handler(event, context):
     if "challenge" in event:
         return event["challenge"]
         
-    chosei_url = choseisan(event.get("event").get("text"))
+    chosei_url = selector(event.get("event").get("text"))
     
     # Slackにメッセージを投稿する
     message = testerchan.get_serifu() + "\n" + chosei_url
@@ -29,12 +29,27 @@ def lambda_handler(event, context):
 
     return 'OK'
     
+def selector(command):
+    if "http" in command:
+        return make_qr(command)
+    elif "choseisan" in command:
+        return choseisan(command)
+    elif "chouseisan" in command:
+        return choseisan(command)
+    else:
+        return "えとえと……ごめんなさい、わかりませんっ＞＜"
+    
 def choseisan(text):
     token = get_token()
     dic_command = get_command(text)
     kouho = get_date(dic_command["num"], dic_command["time"])
     chosei_url = get_chosei_url(token, dic_command["name"], kouho)
     return chosei_url
+    
+def make_qr(text):
+    m = re.findall(r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+', text)
+    return "https://milk0824.sakura.ne.jp/linebot/mid/sample.php?data=" + m[0]
+    
 
 
 def post_message_to_channel(channel, message):
