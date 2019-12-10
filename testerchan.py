@@ -1,7 +1,8 @@
 import random
 
-def serihu():
-    serifu = [
+class Testerchan():
+	def get_finish_message(self):
+		serifu = [
 			"了解です…っ",
 			"了解しましたっ",
 			"了解ですー",
@@ -103,5 +104,5 @@ def serihu():
 			"こんなこともあろうかと用意…あれ、あれれ…今やりますーっ＞＜",
 			"がんばりますっ",
 			"お仕事がんばりますーっ"
-	]
-    return random.choice(serifu)
+		]
+		return random.choice(serifu)
