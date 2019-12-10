@@ -2,7 +2,6 @@
 import os
 import logging
 import json
-import urllib.request
 import urllib
 import re
 import testerchan

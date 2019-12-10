@@ -1,6 +1,5 @@
 import datetime
 import re
-import urllib.request
 import urllib
 
 class Choseisan():
