@@ -3,6 +3,7 @@ import os
 import logging
 import json
 import urllib
+import urllib.request
 import re
 import testerchan
 import choseisan
@@ -20,15 +21,18 @@ def lambda_handler(event, context):
     # SlackのEvent APIの認証
     if "challenge" in event:
         return event["challenge"]
-        
+
     chosei_url = selector(event.get("event").get("text"))
-    logging.info("chousei_url : " + chosei_url)
+    logging.info("**********chousei_url : " + chosei_url)
     
     # Slackにメッセージを投稿する
     message = testerchan.Testerchan().get_finish_message() + "\n" + chosei_url
     post_message_to_channel(event.get("event").get("channel"), message)
 
-    return 'OK'
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
     
 def selector(command):
     if "http" in command:
@@ -68,4 +72,5 @@ def post_message_to_channel(channel, message):
     }
 
     req = urllib.request.Request(url, data=json.dumps(data).encode("utf-8"), method="POST", headers=headers)
-    urllib.request.urlopen(req)
+    response = urllib.request.urlopen(req)
+    logging.info("**********response : " + str(response.getcode()))
